@@ -1,15 +1,41 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import axios from 'axios';
 import { tokens } from "../../theme";
-import { mockDataTeam } from "../../data/mockData";
-import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
+import { useState, useEffect } from 'react';
+
+const fetchUsers = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/auth/allusers');
+    const data = response.data;
+
+    return data.map(user => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phoneNumber,
+      registrationDate: user.registrationDate, // Assuming this field exists in your API response
+    }));
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
+};
 
 const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const users = await fetchUsers();
+      setRows(users);
+    };
+    getData();
+  }, []);
+
   const columns = [
     { field: "id", headerName: "ID" },
     {
@@ -19,9 +45,9 @@ const Team = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "registrationDate",
+      headerName: "Date",
+      type: "date",
       headerAlign: "left",
       align: "left",
     },
@@ -35,42 +61,11 @@ const Team = () => {
       headerName: "Email",
       flex: 1,
     },
-    {
-      field: "accessLevel",
-      headerName: "Access Level",
-      flex: 1,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === "admin"
-                ? colors.greenAccent[600]
-                : access === "manager"
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {access}
-            </Typography>
-          </Box>
-        );
-      },
-    },
   ];
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="All Users" subtitle="Managing the Users" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -100,7 +95,7 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid checkboxSelection rows={rows} columns={columns} />
       </Box>
     </Box>
   );
