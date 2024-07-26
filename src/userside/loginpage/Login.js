@@ -1,34 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../contextAuth/AuthContext'; // Adjust the path as needed
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post('http://localhost:8080/auth/signin', {
+      const response = await axios.post('http://localhost:8080/api/signin', {
         username: email,
         password: password
       });
-
-      const { jwtToken, username } = response.data;
-
-      localStorage.setItem('token', jwtToken);
-      localStorage.setItem('username', username);
-
-      onLogin(username);
-      navigate('/');
-
-      console.log('Logged in successfully! JWT Token:', jwtToken);
-    } catch (error) {
-      console.error('Error signing in:', error);
-      setError('Invalid credentials. Please check your email and password.')
+      const { jwtToken, name, username, roles,id } = response.data;
+      localStorage.setItem('jwtToken', jwtToken);
+      localStorage.setItem("userObj", JSON.stringify({ jwtToken, username, roles, name, id }));
+      login({name, roles,username,id});
+      navigate('/'); // Redirect to the home page or another page
+    } catch (err) {
+      setError('Invalid email or password');
     }
   };
 
@@ -102,7 +97,7 @@ function Login({ onLogin }) {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <div>
+              {/* <div>
                 <a
                   href="#"
                   className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
@@ -110,7 +105,7 @@ function Login({ onLogin }) {
                   <span className="sr-only">Sign in with Google</span>
                   <img className="h-5 w-5" src="https://image.similarpng.com/very-thumbnail/2020/06/Logo-google-icon-PNG.png" alt="Google" />
                 </a>
-              </div>
+              </div> */}
               <div>
                  <Link
                   to="/signup"

@@ -7,7 +7,12 @@ import { useState, useEffect } from 'react';
 
 const fetchUsers = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/auth/allusers');
+    const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
+    const response = await axios.get('http://localhost:8080/allusers', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     const data = response.data;
 
     return data.map(user => ({
@@ -15,6 +20,7 @@ const fetchUsers = async () => {
       name: user.name,
       email: user.email,
       phone: user.phoneNumber,
+      location: user.location, // Assuming this field exists in your API response
       registrationDate: user.registrationDate, // Assuming this field exists in your API response
     }));
   } catch (error) {
@@ -61,6 +67,11 @@ const Team = () => {
       headerName: "Email",
       flex: 1,
     },
+    {
+      field: "location",
+      headerName: "Location",
+      flex: 1, // Adjust flex value as needed
+    }
   ];
 
   return (

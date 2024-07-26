@@ -16,7 +16,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
 import Bids from "./scenes/bid/Bids";
-import RemoveCar from "./scenes/removeCar/RemoveCar";
+import RemoveCar from "./scenes/allCar/AllCar";
 
 import FrontPage from "./userside/frontpage/FrontPage";
 import Login from "./userside/loginpage/Login"; // example user-side component

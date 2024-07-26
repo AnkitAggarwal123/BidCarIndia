@@ -9,6 +9,7 @@ const RegistrationPage = () => {
         name: '',
         email: '',
         phone: '',
+        location: '',
         password: '',
         confirmPassword: ''
     });
@@ -23,15 +24,14 @@ const RegistrationPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (form.password !== form.confirmPassword) {
-            alert('Passwords do not match');
-            return;
+            return 'Passwords do not match';
         }
-
+    
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/auth/create/user', {
+            const response = await fetch('http://localhost:8080/api/create/user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,27 +40,36 @@ const RegistrationPage = () => {
                     name: form.name,
                     email: form.email,
                     phoneNumber: form.phone,
-                    password: form.password,
-                    role: "USER"
+                    location: form.location,
+                    password: form.password
                 })
             });
-
+    
             if (response.ok) {
-                const data = await response.json();
-                console.log('User created:', data);
-                setTimeout(() => navigate('/login'), 1000);
+                const message = await response.text(); // Expecting plain text
+                console.log('Response:', message);
+                return message; // Returning the plain text message
             } else {
-                const errorData = await response.json();
-                console.error('Error creating user:', errorData);
-                alert('Error creating user: ' + errorData.message);
+                const errorMessage = await response.text(); // Expecting plain text
+                console.error('Error:', errorMessage);
+                return 'Error creating user: ' + errorMessage; // Returning the error message
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error creating user');
+            return 'Error creating user'; // Returning general error message
         } finally {
             setLoading(false);
         }
     };
+
+    const handleFormSubmit = async (e) => {
+        const message = await handleSubmit(e);
+        alert(message); // Display the message returned from handleSubmit
+        if (message === 'User added successfully') {
+            navigate('/login'); // Navigate only on success
+        }
+    };
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -68,7 +77,7 @@ const RegistrationPage = () => {
                 <div>
                     <h2 className="text-center text-3xl font-extrabold text-gray-900">Create an account</h2>
                 </div>
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6" onSubmit={handleFormSubmit}>
                     <input type="hidden" name="remember" value="true" />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
@@ -82,6 +91,10 @@ const RegistrationPage = () => {
                         <div>
                             <label htmlFor="phone" className="sr-only">Phone Number</label>
                             <input id="phone" name="phone" type="tel" autoComplete="tel" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mt-2" placeholder="Phone Number" value={form.phone} onChange={handleChange} />
+                        </div>
+                        <div>
+                            <label htmlFor="location" className="sr-only">Location</label>
+                            <input id="locatin" name="location" type="location" autoComplete="location" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm mt-2" placeholder="location" value={form.location} onChange={handleChange} />
                         </div>
                         <div>
                             <label htmlFor="password" className="sr-only">Password</label>

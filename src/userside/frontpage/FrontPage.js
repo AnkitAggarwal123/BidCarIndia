@@ -1,319 +1,251 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Container, Grid, Card, CardContent, CardMedia, Box, Link, Modal, Backdrop, TextField, Fade } from '@mui/material';
-import { Facebook, Twitter, Instagram } from '@mui/icons-material';
-import '@fontsource/source-sans-pro/400.css'; // Importing specific font weights
-import '@fontsource/source-sans-pro/600.css';
-import '@fontsource/source-sans-pro/700.css';
-import { NavLink } from 'react-router-dom';
-import logo from './image.png';
-
-const cars = [
-  { id: 1, name: 'Puch', modelNumber: '2023', carNumber: 'ABC123', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Puch.', details: 'Detailed information about Puch.' },
-  { id: 2, name: 'Carnival', modelNumber: '2022', carNumber: 'DEF456', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Carnival.', details: 'Detailed information about Carnival.' },
-  { id: 3, name: 'Charger', modelNumber: '2023', carNumber: 'GHI789', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Charger.', details: 'Detailed information about Charger.' },
-  { id: 4, name: 'Mustang', modelNumber: '2022', carNumber: 'JKL012', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Mustang.', details: 'Detailed information about Mustang.' },
-  { id: 5, name: 'Bronco', modelNumber: '2023', carNumber: 'MNO345', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Bronco.', details: 'Detailed information about Bronco.' },
-  { id: 6, name: 'Wrangler', modelNumber: '2022', carNumber: 'PQR678', image: 'https://www.bmw-bavariamotors.in/sites/default/files/sliders/i4.jpg', description: 'Description of Wrangler.', details: 'Detailed information about Wrangler.' },
-];
-
-const styles = {
-  hero: {
-    position: 'relative',
-    backgroundImage: 'url(https://www.infinity-group.in/wp-content/uploads/2021/07/5-Benefits-of-Buying-A-Pre-Owned-Luxury-Car.jpg)',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    height: '70vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'white',
-    textShadow: '2px 2px 4px rgba(0,0,0,0.6)',
-  },
-  heroOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust opacity for better text visibility
-  },
-  heroContent: {
-    position: 'relative',
-    zIndex: 1,
-    textAlign: 'center',
-  },
-  header: {
-    backgroundColor: '#ffffff',
-    color: '#3f51b5',
-  },
-  loginButton: {
-    backgroundColor: '#3f51b5',
-    color: '#ffffff',
-    borderRadius: '20px',
-    padding: '6px 20px',
-    textTransform: 'none',
-    fontWeight: 'bold',
-    '&:hover': {
-      backgroundColor: '#ff4081',
-      color: '#ffffff',
-    },
-  },
-  card: {
-    width: '70%', // Adjusted width for responsiveness
-    height: '100%', // Adjusted height for responsiveness
-    borderRadius: '10px',
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)', // Adding box shadow
-    transition: 'transform 0.3s, box-shadow 0.3s',
-    backgroundColor: '#ffffff', // Background color
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    '&:hover': {
-    //   transform: 'scale(1.03)',
-      boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.3)', // Enhance shadow on hover
-    },
-  },
-  cardMedia: {
-    flex: '1 0 auto',
-    maxHeight: '200px', // Maximum height for the image
-    objectFit: 'cover',
-    borderRadius: '10px 10px 0 0', // Rounded corners at the top
-  },
-  cardContent: {
-    padding: '16px', // Padding inside the card content
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: '#3f51b5',
-    color: 'white',
-    padding: '20px 0',
-    marginTop: '40px',
-  },
-  socialIcons: {
-    color: 'white',
-    marginLeft: '10px',
-    marginRight: '10px',
-  },
-  logo: {
-    height: '100px', // Increase the height of the logo
-    maxHeight: '100%', // Ensure logo stays within bounds
-  },
-  welcomeMessage: {
-    fontSize: '2.5rem', // Adjust font size for a prominent look
-    fontWeight: 'bold',
-    marginTop: '20px', // Add spacing between logo and message
-    animation: 'fadeIn 1s ease-in-out', // Apply the fadeIn animation
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center', // Center align items horizontally
-    marginTop: '10px', // Push buttons to the bottom
-    
-  },
-  bidButton: {
-    flex: '1 0 auto',
-    marginRight: '8px', // Provide spacing between buttons
-    backgroundColor: '#991b1b',
-    color: '#ffffff'
-  },
-  seeMoreButton: {
-backgroundColor: '#3b82f6', // Background color for "See More" button
-    color: '#ffffff',
-    whiteSpace: 'nowrap', // Prevent text wrapping
-    padding: '6px 16px', // Add padding for better appearance
-    border: '1px solid #3b82f6', // Add border to simulate outlined variant
-  },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  modalContent: {
-    backgroundColor: '#ffffff',
-    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-    borderRadius: '10px',
-    padding: '20px',
-    outline: 'none',
-  },
-  modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-    marginBottom: '10px',
-  },
-  modalTextField: {
-    width: '100%',
-    marginBottom: '20px',
-  },
-  modalButton: {
-    backgroundColor: '#3f51b5',
-    color: '#ffffff',
-    '&:hover': {
-      backgroundColor: '#ff4081',
-    },
-  },
-};
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../../contextAuth/AuthContext';
+import CarCard from './CarCard';
+import { MainHeader } from '../header/MainHeader';
 
 const FrontPage = () => {
+  const [cars, setCars] = useState([]);
   const [openBidModal, setOpenBidModal] = useState(false);
+  const [openBidModelWithoutPaper, setOpenBidModelWithoutPaper] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [bidAmount, setBidAmount] = useState('');
+  const { user, bidCounts, setBidCounts, bidCountWithoutPaper, setBidCountWithoutPaper } = useAuth();
+  const [maxBid, setMaxBid] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/car');
+        const visibleCars = response.data.filter(car => car.visible === true);
+        setCars(visibleCars);
+      } catch (error) {
+        console.error('Error fetching car data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleOpenBidModal = (car) => {
-    setSelectedCar(car);
-    setOpenBidModal(true);
+    if (user && new Date(car.auctionEndTime).getTime() > new Date().getTime()) {
+      setSelectedCar(car);
+      setOpenBidModal(true);
+    } else {
+      if (!user) {
+        navigate('/login');
+      } else {
+        console.log('Auction time has ended for this car.');
+      }
+    }
+  };
+
+  const handleOpenWithoutPaperBidModal = (car) => {
+    if (user && new Date(car.auctionEndTime).getTime() > new Date().getTime()) {
+      setSelectedCar(car);
+      setOpenBidModelWithoutPaper(true);
+    } else {
+      if (!user) {
+        navigate('/login');
+      } else {
+        console.log('Auction time has ended for this car.');
+      }
+    }
+  };
+
+  const getBidCount = (carId) => {
+    const bidCountObj = bidCounts.find(item => item.carId === carId);
+    return bidCountObj ? bidCountObj.bidCount : 0;
+  };
+
+  const getBidCountWithoutPaper = (carId) => {
+    const bidCountObj = bidCountWithoutPaper.find(item => item.carId === carId);
+    return bidCountObj ? bidCountObj.bidCount : 0;
   };
 
   const handleCloseBidModal = () => {
     setOpenBidModal(false);
+    setOpenBidModelWithoutPaper(false);
     setBidAmount('');
+    setMaxBid('');
+    setSelectedCar(null);
+  };
+  const token = localStorage.getItem('jwtToken');
+
+  const handleBidSubmit = async (event) => {
+    event.preventDefault();
+  
+    // Retrieve the JWT token from localStorage or wherever it's stored
+     // Adjust this according to your token storage method
+  
+    try {
+      const response = await axios.post('http://localhost:8080/bids', {
+        carId: selectedCar.id,
+        amount: bidAmount
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}` // Include the token in the header
+        }
+      });
+  
+      console.log('Bid submitted:', response.data);
+  
+      // Update the bid count in the local state
+      bidCounts.forEach((ele) => {
+        if (ele.carId === selectedCar.id) {
+          ele.bidCount++;
+        }
+      });
+  
+      setBidCounts([...bidCounts]);
+      handleCloseBidModal();
+    } catch (error) {
+      console.error('Error submitting bid:', error);
+    }
   };
 
-  const handleBidSubmit = (event) => {
+  const handleBidSubmitWithoutPaper = async (event) => {
     event.preventDefault();
-    // Perform bid submission logic here
-    console.log(`Bid submitted for ${selectedCar.name} with amount ${bidAmount}`);
-    handleCloseBidModal();
+    
+    // Retrieve the JWT token from local storage or another secure location
+    const token = localStorage.getItem('jwtToken');
+  
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/bids/withoutPaper',
+        {
+          carId: selectedCar.id,
+          amount: bidAmount
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Set the Authorization header with the JWT token
+            'Content-Type': 'application/json' // Optional: Specify the content type if needed
+          }
+        }
+      );
+  
+      console.log('Bid submitted:', response.data);
+  
+      bidCountWithoutPaper.forEach((ele) => {
+        if (ele.carId === selectedCar.id) {
+          ele.bidCount++;
+        }
+      });
+  
+      setBidCountWithoutPaper([...bidCountWithoutPaper]);
+      handleCloseBidModal();
+    } catch (error) {
+      console.error('Error submitting bid:', error);
+    }
   };
+
+  const isBidLimitReached = (carId) => getBidCount(carId) >= 20;
+  const isBidLimitReachedWithoutPaper = (carId) => getBidCountWithoutPaper(carId) >= 20;
+
+  const maximumBid = async (e) => {
+    const bidAmount = e.target.value;
+    setBidAmount(bidAmount);
+
+    try {
+        const response = await axios.get(`http://localhost:8080/maximum/amount/${selectedCar.id}/${bidAmount}`, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Include the token in the header
+            }
+        });
+
+        // Assuming response.data is what you need to determine if it's the maximum bid
+        setMaxBid(response.data ? "true" : "false");
+    } catch (error) {
+        console.error("Error fetching maximum bid amount:", error);
+    }
+};
 
   return (
-    <Box sx={{ fontFamily: 'Source Sans Pro, sans-serif', backgroundColor: '#ffffff', minHeight: '100vh' }}>
-      <style>
-        {`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
-            }
-          }
-        `}
-      </style>
-      <AppBar position="static" sx={styles.header}>
-        <Toolbar>
-          <img src={logo} alt="Company Logo" style={styles.logo} />
-          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="h6" component="div" sx={styles.welcomeMessage}>
-              Welcome to Car Auctions
-            </Typography>
-          </Box>
-          <NavLink to="/login">
-            <Button sx={styles.loginButton}>Login</Button>
-          </NavLink>
-        </Toolbar>
-      </AppBar>
-      <Box sx={styles.hero}>
-        <Box sx={styles.heroOverlay} />
-        <Box sx={styles.heroContent}>
-          <Typography variant="h2" component="div">
-            Welcome to Car Auctions
-          </Typography>
-          <Typography variant="h6" component="div">
-            Discover, Bid, and Win Your Dream Car
-          </Typography>
-        </Box>
-      </Box>
-      <Container sx={{ marginTop: 4, marginBottom:20}}>
-        <Grid container columnSpacing={2} rowSpacing={5}>
-          {cars.map((car) => (
-            
-            <Grid item key={car.id} xs={12} sm={6} md={4}>
-              <Card sx={styles.card}>
-                <CardMedia
-                  component="img"
-                  className={styles.cardMedia}
-                  image={car.image}
-                  alt={car.name}
-                />
-                <CardContent sx={styles.cardContent}>
-                <Typography variant="h5" component="div">
-                   {car.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    Model Number: {car.modelNumber} {/* Add model number */}
-                 </Typography>
-                 <Typography variant="body2" color="text.secondary">
-                     Car Number: {car.carNumber} {/* Add car number */}
-                 </Typography>
-                 <Typography variant="body2" color="text.secondary" >
-                   {car.description}
-                    </Typography>
-                  <Box sx={styles.buttonContainer}>
-                    <Button variant="contained" sx={styles.bidButton} onClick={() => handleOpenBidModal(car)}>Bid Now</Button>
-                        <NavLink to="/detail">
-                     <Button variant="contained" sx={styles.seeMoreButton}>See More</Button>
-                     </NavLink>
-                   </Box>
-                  </CardContent>
-              </Card>
-            </Grid>
-          
-          ))}
-        
-        </Grid>
-      </Container>
-      <Box component="footer" sx={styles.footer}>
-        <Container maxWidth="lg">
-          <Typography variant="h6" align="center" gutterBottom>
-            Contact Us
-          </Typography>
-          <Typography variant="subtitle1" align="center" component="p">
-            Email: contact@company.com | Phone: +123 456 7890
-          </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Link href="https://www.facebook.com" target="_blank" sx={styles.socialIcons}>
-              <Facebook />
-            </Link>
-            <Link href="https://www.twitter.com" target="_blank" sx={styles.socialIcons}>
-              <Twitter />
-            </Link>
-            <Link href="https://www.instagram.com" target="_blank" sx={styles.socialIcons}>
-              <Instagram />
-            </Link>
-          </Box>
-        </Container>
-      </Box>
-      {/* Bidding Modal */}
-      <Modal
-        open={openBidModal}
-        onClose={handleCloseBidModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        closeAfterTransition
-        sx={styles.modal}
-      >
-        <Fade in={openBidModal}>
-          <Box sx={styles.modalContent}>
-            <Typography variant="h6" component="h2" sx={styles.modalTitle}>
-              Bid for {selectedCar ? selectedCar.name : ''}
-            </Typography>
-            <TextField
-              label="Bid Amount"
-              type="number"
-              variant="outlined"
-              fullWidth
-              value={bidAmount}
-              onChange={(e) => setBidAmount(e.target.value)}
-              sx={styles.modalTextField}
-            />
-            <Button
-              variant="contained"
-              onClick={handleBidSubmit}
-              sx={styles.modalButton}
-            >
-              Submit Bid
-            </Button>
-          </Box>
-        </Fade>
-      </Modal>
+    <div className="font-source-sans-pro bg-white min-h-screen">
+    <MainHeader/>
+      
+      <section className="bg-cover bg-center h-96 bg-no-repeat relative" style={{ backgroundImage: 'url(https://www.infinity-group.in/wp-content/uploads/2021/07/5-Benefits-of-Buying-A-Pre-Owned-Luxury-Car.jpg)' }}>
+        <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-50"></div>
+        <div className="flex flex-col justify-center items-center text-white text-center relative z-10 h-full">
+          <h2 className="text-6xl font-bold">Welcome to Bid Cars India</h2>
+          <p className="text-xl">Bid With Us, Grow With Us</p>
+        </div>
+      </section>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {cars.length > 0 ? (
+          <div className="flex flex-wrap justify-center -m-4">
+            {cars.map((car) => (
+              <CarCard
+                key={car.id}
+                car={car}
+                handleOpenBidModal={handleOpenBidModal}
+                getBidCount={getBidCount}
+                isBidLimitReached={isBidLimitReached}
+                handleOpenWithoutPaperBidModal={handleOpenWithoutPaperBidModal}
+                getBidCountWithoutPaper={getBidCountWithoutPaper}
+                isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className='text-black text-center text-2xl'>No car listed</div>
+        )}
+      </main>
 
-    </Box>
+      {openBidModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-md p-8 max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Place Your Bid for {selectedCar.carName}</h2>
+            <form onSubmit={handleBidSubmit}>
+              <div className="mb-4">
+                <label htmlFor="bidAmount" className="block text-gray-700 font-bold mb-2">Bid Amount</label>
+                <input
+                  type="number"
+                  id="bidAmount"
+                  value={bidAmount}
+                  onChange={maximumBid}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="flex justify-between">
+                <button type="button" className="bg-gray-500 text-white rounded-full px-4 py-2 mr-2" onClick={handleCloseBidModal}>Cancel</button>
+                <button type="submit" className="bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700">Submit Bid</button>
+              </div>
+              <div>{maxBid}</div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {openBidModelWithoutPaper && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-md p-8 max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Place Your Bid for {selectedCar.carName}</h2>
+            <form onSubmit={handleBidSubmitWithoutPaper}>
+              <div className="mb-4">
+                <label htmlFor="bidAmount" className="block text-gray-700 font-bold mb-2">Bid Amount</label>
+                <input
+                  type="number"
+                  id="bidAmount"
+                  value={bidAmount}
+                  onChange={(e) => setBidAmount(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div className="flex justify-between">
+                <button type="button" className="bg-gray-500 text-white rounded-full px-4 py-2 mr-2" onClick={handleCloseBidModal}>Cancel</button>
+                <button type="submit" className="bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700">Submit Bid</button>
+              </div>
+              <div>{maxBid}</div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
