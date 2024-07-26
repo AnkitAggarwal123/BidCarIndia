@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, Typography, Paper, Card, CardContent, Box, CircularProgress, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { EmojiEvents, HourglassEmpty, ExpandMore } from '@mui/icons-material';
 import axios from 'axios';
+import {BASE_URL} from '../../config/Config'
 
 const styles = {
   paper: {
@@ -62,19 +63,19 @@ const YourBid = () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         // Fetch winning bid with paper
-        const { data: winningWithPaperData } = await axios.get('http://localhost:8080/winning/bids/withPaper', { headers });
+        const { data: winningWithPaperData } = await axios.get(`${BASE_URL}/winning/bids/withPaper`, { headers });
         setWinningWithPaper(winningWithPaperData[0] || null);
 
         // Fetch winning bid without paper
-        const { data: winningWithoutPaperData } = await axios.get('http://localhost:8080/winning/bids/withoutPaper', { headers });
+        const { data: winningWithoutPaperData } = await axios.get(`${BASE_URL}/winning/bids/withoutPaper`, { headers });
         setWinningWithoutPaper(winningWithoutPaperData[0] || null);
 
         // Fetch other bids with paper
-        const { data: otherBidsWithPaperData } = await axios.get('http://localhost:8080/all/waiting/bidWithPaper', { headers });
+        const { data: otherBidsWithPaperData } = await axios.get(`${BASE_URL}/all/waiting/bidWithPaper`, { headers });
         setOtherBidsWithPaper(otherBidsWithPaperData);
 
         // Fetch other bids without paper
-        const { data: otherBidsWithoutPaperData } = await axios.get('http://localhost:8080/all/waiting/bidWithoutPaper', { headers });
+        const { data: otherBidsWithoutPaperData } = await axios.get(`${BASE_URL}/all/waiting/bidWithoutPaper`, { headers });
         setOtherBidsWithoutPaper(otherBidsWithoutPaperData);
 
         setLoading(false);

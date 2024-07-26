@@ -5,6 +5,7 @@ import Carousel from 'react-material-ui-carousel';
 import { LocationOn, Commute, LocalGasStation, AccountBalance, Details } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
+import {BASE_URL} from '../../config/Config'
 
 const styles = {
   paper: {
@@ -83,7 +84,7 @@ const VehicleDetailPage = () => {
     try {
       // Send the request with the JWT in the header
       const response = await axios.post(
-        'http://localhost:8080/bids',
+        `${BASE_URL}/bids`,
         {
           carId: car.id,
           amount: bidAmount
@@ -122,7 +123,7 @@ const VehicleDetailPage = () => {
     try {
       // Send the request with the JWT in the header
       const response = await axios.post(
-        'http://localhost:8080/bids/withoutPaper',
+        `${BASE_URL}/bids/withoutPaper`,
         {
           carId: car.id,
           amount: bidAmount

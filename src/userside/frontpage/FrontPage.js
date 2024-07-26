@@ -5,6 +5,8 @@ import { useAuth } from '../../contextAuth/AuthContext';
 import CarCard from './CarCard';
 import { MainHeader } from '../header/MainHeader';
 
+import {BASE_URL} from '../../config/Config'
+
 const FrontPage = () => {
   const [cars, setCars] = useState([]);
   const [openBidModal, setOpenBidModal] = useState(false);
@@ -18,7 +20,7 @@ const FrontPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://192.168.1.5:8080/api/car');
+        const response = await axios.get(`${BASE_URL}/api/car`);
         const visibleCars = response.data.filter(car => car.visible === true);
         setCars(visibleCars);
       } catch (error) {
@@ -80,7 +82,7 @@ const FrontPage = () => {
      // Adjust this according to your token storage method
   
     try {
-      const response = await axios.post('https://192.168.1.5:8080/bids', {
+      const response = await axios.post(`${BASE_URL}/bids`, {
         carId: selectedCar.id,
         amount: bidAmount
       }, {
@@ -113,7 +115,7 @@ const FrontPage = () => {
   
     try {
       const response = await axios.post(
-        'https://192.168.1.5:8080/bids/withoutPaper',
+        `${BASE_URL}/bids/withoutPaper`,
         {
           carId: selectedCar.id,
           amount: bidAmount
@@ -149,7 +151,7 @@ const FrontPage = () => {
     setBidAmount(bidAmount);
 
     try {
-        const response = await axios.get(`https://192.168.1.5:8080/maximum/amount/${selectedCar.id}/${bidAmount}`, {
+        const response = await axios.get(`${BASE_URL}/maximum/amount/${selectedCar.id}/${bidAmount}`, {
             headers: {
                 'Authorization': `Bearer ${token}` // Include the token in the header
             }

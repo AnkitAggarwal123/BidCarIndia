@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {BASE_URL} from '../config/Config'
 
 const AuthContext = createContext();
 
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('jwtToken');
     if (token) {
-      axios.post('http://localhost:8080/api/verifyToken', { token })
+      axios.post(`${BASE_URL}/api/verifyToken`, { token })
         .then(response => {
           const { jwtToken, username, roles, name, id } = response.data;
           setUser({ jwtToken, username, roles, name, id });
@@ -56,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('jwtToken'); // Adjust this according to your token storage method
   
     try {
-      const response = await axios.get('http://localhost:8080/bid/count/withoutPaper', {
+      const response = await axios.get(`${BASE_URL}/bid/count/withoutPaper`, {
         headers: {
           'Authorization': `Bearer ${token}` // Include the token in the header
         }
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('jwtToken'); // Adjust this according to your token storage method
   
     try {
-      const response = await axios.get('http://localhost:8080/bid/count', {
+      const response = await axios.get(`${BASE_URL}/bid/count`, {
         headers: {
           'Authorization': `Bearer ${token}` // Include the token in the header
         }

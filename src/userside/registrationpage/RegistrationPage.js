@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import {BASE_URL} from '../../config/Config'
+
 const RegistrationPage = () => {
     const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ const RegistrationPage = () => {
     
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:8080/api/create/user', {
+            const response = await fetch(`${BASE_URL}/api/create/user`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext'; // Adjust the path as needed
+import {BASE_URL} from '../../config/Config'
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/signin', {
+      const response = await axios.post(`${BASE_URL}/api/signin`, {
         username: email,
         password: password
       });
