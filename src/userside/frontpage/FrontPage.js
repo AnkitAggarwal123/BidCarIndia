@@ -18,7 +18,7 @@ const FrontPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/car');
+        const response = await axios.get('http://192.168.1.5:8080/api/car');
         const visibleCars = response.data.filter(car => car.visible === true);
         setCars(visibleCars);
       } catch (error) {
@@ -80,7 +80,7 @@ const FrontPage = () => {
      // Adjust this according to your token storage method
   
     try {
-      const response = await axios.post('http://localhost:8080/bids', {
+      const response = await axios.post('http://192.168.1.5:8080/bids', {
         carId: selectedCar.id,
         amount: bidAmount
       }, {
@@ -113,7 +113,7 @@ const FrontPage = () => {
   
     try {
       const response = await axios.post(
-        'http://localhost:8080/bids/withoutPaper',
+        'http://192.168.1.5:8080/bids/withoutPaper',
         {
           carId: selectedCar.id,
           amount: bidAmount
@@ -149,7 +149,7 @@ const FrontPage = () => {
     setBidAmount(bidAmount);
 
     try {
-        const response = await axios.get(`http://localhost:8080/maximum/amount/${selectedCar.id}/${bidAmount}`, {
+        const response = await axios.get(`http://192.168.1.5:8080/maximum/amount/${selectedCar.id}/${bidAmount}`, {
             headers: {
                 'Authorization': `Bearer ${token}` // Include the token in the header
             }
