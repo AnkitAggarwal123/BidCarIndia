@@ -4,11 +4,12 @@ import axios from 'axios';
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
 import { useState, useEffect } from 'react';
+import {BASE_URL} from '../../config/Config'
 
 const fetchUsers = async () => {
   try {
     const token = localStorage.getItem('jwtToken'); // Retrieve JWT token from local storage
-    const response = await axios.get('http://localhost:8080/allusers', {
+    const response = await axios.get(`${BASE_URL}/allusers`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

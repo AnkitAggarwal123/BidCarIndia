@@ -17,6 +17,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import axios from "axios";
+import {BASE_URL} from '../../config/Config'
 
 const AllCar = () => {
   const [cars, setCars] = useState([]);
@@ -24,7 +25,7 @@ const AllCar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/car");
+        const response = await axios.get(`${BASE_URL}/api/car`);
         setCars(response.data);
       } catch (error) {
         console.error("Error fetching car data:", error);
@@ -40,7 +41,7 @@ const AllCar = () => {
   
     try {
       const response = await axios.put(
-        `http://localhost:8080/visible/admin/${visibility}/${carId}`,
+        `${BASE_URL}/visible/admin/${visibility}/${carId}`,
         {},
         {
           headers: {

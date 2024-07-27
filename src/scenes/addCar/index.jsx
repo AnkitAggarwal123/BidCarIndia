@@ -7,6 +7,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import {BASE_URL} from '../../config/Config'
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -35,7 +36,7 @@ const Form = () => {
 
     try {
       
-      const carResponse = await axios.post("http://localhost:8080/car", carData, {
+      const carResponse = await axios.post(`${BASE_URL}/car`, carData, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`,
@@ -52,7 +53,7 @@ const Form = () => {
       formData.append("id", carId);
 
       // Second API call to submit images
-      const imageResponse = await axios.post("http://localhost:8080/add/car/image", formData, {
+      const imageResponse = await axios.post(`${BASE_URL}/add/car/image`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${token}`,

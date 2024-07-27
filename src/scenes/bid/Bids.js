@@ -5,6 +5,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import axios from 'axios';
+import {BASE_URL} from '../../config/Config'
 
 const styles = {
   carCard: {
@@ -65,22 +66,22 @@ const Bids = () => {
       try {
         const token = localStorage.getItem('jwtToken');
         const [responseWithPaper, responseWithoutPaper, winnersWithPaper, winnersWithoutPaper] = await Promise.all([
-          axios.get('http://localhost:8080/all/bids', {
+          axios.get(`${BASE_URL}/all/bids`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }),
-          axios.get('http://localhost:8080/all/bids/withoutPaper', {
+          axios.get(`${BASE_URL}/all/bids/withoutPaper`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }),
-          axios.get('http://localhost:8080/winnerWithPaper/all', {
+          axios.get(`${BASE_URL}/winnerWithPaper/all`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
           }),
-          axios.get('http://localhost:8080/winnerWithoutPaper/all', {
+          axios.get(`${BASE_URL}/winnerWithoutPaper/all`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -144,7 +145,7 @@ const Bids = () => {
     const token = localStorage.getItem('jwtToken');
 
     try {
-      await axios.delete(`http://localhost:8080/${endpoint}`, {
+      await axios.delete(`${BASE_URL}/${endpoint}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -183,7 +184,7 @@ const Bids = () => {
     console.log(carId);
 
     try {
-      await axios.post(`http://localhost:8080/${endpoint}`, null, {
+      await axios.post(`${BASE_URL}/${endpoint}`, null, {
         headers: {
           Authorization: `Bearer ${token}`
         }
