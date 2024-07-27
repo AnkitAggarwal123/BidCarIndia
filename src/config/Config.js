@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://car.bidcarsindia.comn';
+export const BASE_URL = 'https://car.bidcarsindia.com';
