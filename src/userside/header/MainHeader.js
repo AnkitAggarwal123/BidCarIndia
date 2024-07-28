@@ -5,7 +5,6 @@ import { useAuth } from '../../contextAuth/AuthContext'; // Adjust the path as n
 import { Menu, MenuItem, IconButton, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import UserProfile from '../userProfile/UserProfile'; // Assuming you have a UserProfile component
 
 export const MainHeader = () => {
   const { user, logout } = useAuth();
