@@ -7,8 +7,8 @@ function Footer() {
       <div className="flex flex-wrap justify-between">
         <div className="w-full md:w-auto mb-4 md:mb-0">
           <h3 className="text-lg font-bold">Bid Cars India</h3>
-          <p>Contact: +91 1234567890</p>
-          <p>Email: info@bidcarsindia.com</p>
+          <p>Contact: +91 8882451292</p>
+          <p>Email: auction@bidcarsindia.com</p>
         </div>
         <div className="w-full md:w-auto">
           <h3 className="text-lg font-bold">Follow Us</h3>

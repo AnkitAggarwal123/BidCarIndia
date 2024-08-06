@@ -58,9 +58,6 @@ export const MainHeader = () => {
                   getContentAnchorEl={null}
                   elevation={1}
                 >
-                  <MenuItem component={NavLink} to="/userdetail" onClick={handleMenuClose}>
-                    Your Details
-                  </MenuItem>
                   <MenuItem component={NavLink} to="/yourbid" onClick={handleMenuClose}>Your Bids</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </Menu>

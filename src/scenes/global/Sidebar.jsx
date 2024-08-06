@@ -18,6 +18,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import BidsIcon from "@mui/icons-material/AttachMoneyOutlined";
 import RemoveCarIcon from "@mui/icons-material/RemoveCircleOutline";
+import UserRequestIcon from "@mui/icons-material/PersonAddOutlined"; // Import an appropriate icon for User Requests
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -99,7 +100,7 @@ const Sidebar = () => {
                   width="100px"
                   height="100px"
                   src={`../../assets/user.png`}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  // style={{ cursor: "pointer", borderRadius: "50%" }}
                 />
               </Box>
               <Box textAlign="center">
@@ -109,11 +110,11 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Rohit
+                  BID CARS INDIA
                 </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
+                {/* <Typography variant="h5" color={colors.greenAccent[500]}>
                   VP Fancy Admin
-                </Typography>
+                </Typography> */}
               </Box>
             </Box>
           )}
@@ -142,6 +143,13 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
+              title="User Requests"  // New Item for User Requests
+              to="/admin/user-requests"  // Adjust the route as necessary
+              icon={<UserRequestIcon />}  // New Icon for User Requests
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
               title="Contacts Information"
               to="/admin/contacts"
               icon={<ContactsOutlinedIcon />}
@@ -161,7 +169,7 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              cars
+              Cars
             </Typography>
             <Item
               title="Add New Car"
@@ -170,22 +178,21 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-                <Item
+            <Item
               title="Bids"
-              to="/admin/bids" 
-              icon={<BidsIcon />} 
+              to="/admin/bids"
+              icon={<BidsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-
-             <Item
-              title="Allcar"
+            <Item
+              title="Uploaded Cars"
               to="/admin/removeCar"
               icon={<RemoveCarIcon />}
               selected={selected}
               setSelected={setSelected}
             />
-            
+
             <Item
               title="Calendar"
               to="/admin/calendar"
@@ -230,7 +237,7 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
 
-             <Typography
+            <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}

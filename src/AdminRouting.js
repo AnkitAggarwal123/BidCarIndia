@@ -20,6 +20,7 @@ import RemoveCar from "./scenes/allCar/AllCar";
 
 import FrontPage from "./userside/frontpage/FrontPage";
 import Login from "./userside/loginpage/Login"; // example user-side component
+import UserRequests from "./scenes/userRequests/UserRequests";
 
 
 function AdminRouting() {
@@ -54,6 +55,7 @@ function AdminRouting() {
                       <Route path="geography" element={<Geography />} />
                       <Route path="bids" element={<Bids />} />
                       <Route path="removeCar" element={<RemoveCar />} />
+                      <Route path="user-requests" element={<UserRequests/>}/>
                     </Routes>
                   </main>
                 </>

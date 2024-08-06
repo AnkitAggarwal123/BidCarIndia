@@ -101,7 +101,7 @@ const FrontPage = () => {
       });
   
       setBidCounts([...bidCounts]);
-      handleCloseBidModal();
+      maximumBid();
     } catch (error) {
       console.error('Error submitting bid:', error);
     }
@@ -146,23 +146,25 @@ const FrontPage = () => {
   const isBidLimitReached = (carId) => getBidCount(carId) >= 20;
   const isBidLimitReachedWithoutPaper = (carId) => getBidCountWithoutPaper(carId) >= 20;
 
-  const maximumBid = async (e) => {
-    const bidAmount = e.target.value;
-    setBidAmount(bidAmount);
-
+  const maximumBid = async () => {
+    console.log('Selected Car ID:', selectedCar.id);
+    console.log('Bid Amount:', bidAmount);
+  
     try {
-        const response = await axios.get(`${BASE_URL}/maximum/amount/${selectedCar.id}/${bidAmount}`, {
-            headers: {
-                'Authorization': `Bearer ${token}` // Include the token in the header
-            }
-        });
-
-        // Assuming response.data is what you need to determine if it's the maximum bid
-        setMaxBid(response.data ? "true" : "false");
+      const response = await axios.get(`${BASE_URL}/maximum/amount/${selectedCar.id}/${bidAmount}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      console.log('API Response:', response.data);
+  
+      setMaxBid(response.data ? 'true' : 'false');
     } catch (error) {
-        console.error("Error fetching maximum bid amount:", error);
+      console.error('Error fetching maximum bid amount:', error);
+      setMaxBid('false');
     }
-};
+  };      
 
   return (
     <div className="font-source-sans-pro bg-white min-h-screen">
@@ -207,7 +209,7 @@ const FrontPage = () => {
                   type="number"
                   id="bidAmount"
                   value={bidAmount}
-                  onChange={maximumBid}
+                  onChange={(e)=>{setBidAmount(e.target.value)}}
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   required
                 />
