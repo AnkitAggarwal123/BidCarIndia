@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Grid, Typography, Paper, Box, Button } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import { LocationOn, Commute, LocalGasStation, AccountBalance, Details } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
-import {BASE_URL} from '../../config/Config'
+import { BASE_URL } from '../../config/Config';
 
 const styles = {
   paper: {
@@ -50,125 +50,78 @@ const VehicleDetailPage = () => {
 
   const [openBidModal, setOpenBidModal] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
-  const [openBidModelWithoutPaper, setOpenBidModelWithoutPaper] = useState(false);
+  const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
+  const [maxBid, setMaxBid] = useState('');
 
-
-  const handleOpenBidModal = () => {
+  const handleOpenBidModal = (withPaper) => {
     if (user) {
+      setIsBidWithPaper(withPaper);
       setOpenBidModal(true);
     } else {
       navigate('/login');
     }
   };
 
-  const handleOpenWithoutPaperBidModal = (car) => {
-    if (user) {
-      setOpenBidModelWithoutPaper(true);
-    } else {
-        navigate('/login');
-    }
-  };
-
   const handleCloseBidModal = () => {
     setOpenBidModal(false);
-    setOpenBidModelWithoutPaper(false)
     setBidAmount('');
+    setMaxBid('');
   };
 
   const handleBidSubmit = async (event) => {
     event.preventDefault();
+
+    setMaxBid('')
   
-    // Retrieve the JWT token from local storage or another secure location
-    const token = localStorage.getItem('jwtToken'); // Adjust the key if necessary
+    const token = localStorage.getItem('jwtToken');
+    const url = isBidWithPaper ? `${BASE_URL}/bids` : `${BASE_URL}/bids/withoutPaper`;
   
     try {
-      // Send the request with the JWT in the header
       const response = await axios.post(
-        `${BASE_URL}/bids`,
+        url,
         {
           carId: car.id,
-          amount: bidAmount
+          amount: bidAmount,
         },
         {
           headers: {
-            'Authorization': `Bearer ${token}`, // Add JWT token in the Authorization header
-            'Content-Type': 'application/json' // Specify the content type
-          }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
   
       console.log('Bid submitted:', response.data);
   
-      // Update bid count in the state
-      bidCounts.forEach((ele) => {
-        if (ele.carId === car.id) {
-          ele.bidCount++;
-        }
-      });
-      setBidCounts([...bidCounts]);
-  
-      // Close the bid modal
-      handleCloseBidModal();
-    } catch (error) {
-      console.error('Error submitting bid:', error);
-    }
-  };
-
-  const handleBidSubmitWithoutPaper = async (event) => {
-    event.preventDefault();
-  
-    // Retrieve the JWT token from local storage or another secure location
-    const token = localStorage.getItem('jwtToken'); // Adjust the key if necessary
-  
-    try {
-      // Send the request with the JWT in the header
-      const response = await axios.post(
-        `${BASE_URL}/bids/withoutPaper`,
-        {
-          carId: car.id,
-          amount: bidAmount
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`, // Set the Authorization header with the JWT token
-            'Content-Type': 'application/json' // Specify the content type
-          }
-        }
+      const updatedBidCounts = isBidWithPaper ? bidCounts : bidCountWithoutPaper;
+      const updateBidCounts = updatedBidCounts.map((ele) =>
+        ele.carId === car.id ? { ...ele, bidCount: ele.bidCount + 1 } : ele
       );
-  
-      console.log('Bid submitted:', response.data);
-  
-      // Update bid count in the state
-      bidCountWithoutPaper.forEach((ele) => {
-        if (ele.carId === car.id) {
-          ele.bidCount++;
-        }
-      });
-      setBidCountWithoutPaper([...bidCountWithoutPaper]);
-  
-      // Close the bid modal
-      handleCloseBidModal();
+
+      if (isBidWithPaper) {
+        setBidCounts(updateBidCounts);
+      } else {
+        setBidCountWithoutPaper(updateBidCounts);
+      }
+
+      const isMaxBid = response.data.isMaxBid;
+      if (isMaxBid) {
+        setMaxBid(`🎉 Congratulations! You are currently winning this car with a bid of ${bidAmount}! 🚗👑`);
+      } else {
+        setMaxBid(`📉 Your bid of ${bidAmount} was placed, but you are not currently winning this car. 😔`);
+      }
     } catch (error) {
       console.error('Error submitting bid:', error);
+      setMaxBid('❌ There was an error placing your bid. Please try again. 🔄');
     }
   };
 
-  const   isBidLimitReached = () => {
-    return getBidCount() >= 20;
-  };
-
-  const isBidLimitReachedWithoutPaper = ()=>{
-    return getBidCountWithoutPaper() >= 20
-  }
+  const isBidLimitReached = () => getBidCount() >= 20;
+  const isBidLimitReachedWithoutPaper = () => getBidCountWithoutPaper() >= 20;
 
   const getBidCount = () => {
     const bidCountObj = bidCounts.find(item => item.carId === car.id);
-
-    if (!bidCountObj) {
-      return 0;
-    } else {
-      return bidCountObj.bidCount;
-    }
+    return bidCountObj ? bidCountObj.bidCount : 0;
   };
 
   const getBidCountWithoutPaper = () => {
@@ -238,7 +191,7 @@ const VehicleDetailPage = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleOpenBidModal}
+            onClick={() => handleOpenBidModal(true)}
             disabled={isBidLimitReached()}
             style={{ marginRight: '10px' }}
           >
@@ -247,8 +200,8 @@ const VehicleDetailPage = () => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => handleOpenWithoutPaperBidModal(car)}
-            disabled = {isBidLimitReachedWithoutPaper()}
+            onClick={() => handleOpenBidModal(false)}
+            disabled={isBidLimitReachedWithoutPaper()}
           >
             Bid without Paper ({getBidCountWithoutPaper()}/20)
           </Button>
@@ -269,7 +222,7 @@ const VehicleDetailPage = () => {
                 onChange={(e) => setBidAmount(e.target.value)}
                 required
               />
-              <div className="flex justify-end">
+              <div className="flex justify-between">
                 <Button type="button" variant="contained" color="secondary" onClick={handleCloseBidModal}>
                   Cancel
                 </Button>
@@ -277,37 +230,11 @@ const VehicleDetailPage = () => {
                   Submit Bid
                 </Button>
               </div>
+              <div className="text-center mt-4 text-gray-700 font-semibold">{maxBid}</div>
             </form>
           </div>
         </div>
       )}
-
-      {openBidModelWithoutPaper && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white shadow-lg rounded-md p-8 max-w-md">
-            <h2 className="text-2xl font-bold mb-4">Bid for {car ? car.carName : ''}</h2>
-            <form onSubmit={handleBidSubmitWithoutPaper}>
-              <input
-                type="number"
-                className="border rounded-md p-2 w-full mb-4"
-                placeholder="Enter Bid Amount"
-                value={bidAmount}
-                onChange={(e) => setBidAmount(e.target.value)}
-                required
-              />
-              <div className="flex justify-end">
-                <Button type="button" variant="contained" color="secondary" onClick={handleCloseBidModal}>
-                  Cancel
-                </Button>
-                <Button type="submit" variant="contained" color="primary" style={{ marginLeft: '10px' }}>
-                  Submit Bid
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
     </Paper>
   );
 };

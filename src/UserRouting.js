@@ -5,8 +5,6 @@ import { Route, Routes } from "react-router-dom";
 import VehicleDetailPage from "./userside/vehicledeailpage/VehicleDetailPage";
 import RegistrationPage from "./userside/registrationpage/RegistrationPage";
 import UserProfile from "./userside/userProfile/UserProfile";
-import { Fragment } from "react";
-import { MainHeader } from "./userside/header/MainHeader";
 import Footer from "./userside/footer/Footer";
 import YourBid from "./userside/yourBid/YourBid";
 function UserRouting() {

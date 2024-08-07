@@ -4,17 +4,16 @@ import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
 import CarCard from './CarCard';
 import { MainHeader } from '../header/MainHeader';
-
-import {BASE_URL} from '../../config/Config'
+import { BASE_URL } from '../../config/Config';
 
 const FrontPage = () => {
   const [cars, setCars] = useState([]);
   const [openBidModal, setOpenBidModal] = useState(false);
-  const [openBidModelWithoutPaper, setOpenBidModelWithoutPaper] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
   const [bidAmount, setBidAmount] = useState('');
-  const { user, bidCounts, setBidCounts, bidCountWithoutPaper, setBidCountWithoutPaper } = useAuth();
+  const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
   const [maxBid, setMaxBid] = useState('');
+  const { user, bidCounts, setBidCounts, bidCountWithoutPaper, setBidCountWithoutPaper } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,23 +29,11 @@ const FrontPage = () => {
     fetchData();
   }, []);
 
-  const handleOpenBidModal = (car) => {
+  const handleOpenBidModal = (car, withPaper) => {
     if (user && new Date(car.auctionEndTime).getTime() > new Date().getTime()) {
       setSelectedCar(car);
+      setIsBidWithPaper(withPaper);
       setOpenBidModal(true);
-    } else {
-      if (!user) {
-        navigate('/login');
-      } else {
-        console.log('Auction time has ended for this car.');
-      }
-    }
-  };
-
-  const handleOpenWithoutPaperBidModal = (car) => {
-    if (user && new Date(car.auctionEndTime).getTime() > new Date().getTime()) {
-      setSelectedCar(car);
-      setOpenBidModelWithoutPaper(true);
     } else {
       if (!user) {
         navigate('/login');
@@ -68,107 +55,63 @@ const FrontPage = () => {
 
   const handleCloseBidModal = () => {
     setOpenBidModal(false);
-    setOpenBidModelWithoutPaper(false);
     setBidAmount('');
     setMaxBid('');
     setSelectedCar(null);
   };
-  const token = localStorage.getItem('jwtToken');
 
   const handleBidSubmit = async (event) => {
     event.preventDefault();
   
-    // Retrieve the JWT token from localStorage or wherever it's stored
-     // Adjust this according to your token storage method
-  
-    try {
-      const response = await axios.post(`${BASE_URL}/bids`, {
-        carId: selectedCar.id,
-        amount: bidAmount
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}` // Include the token in the header
-        }
-      });
-  
-      console.log('Bid submitted:', response.data);
-  
-      // Update the bid count in the local state
-      bidCounts.forEach((ele) => {
-        if (ele.carId === selectedCar.id) {
-          ele.bidCount++;
-        }
-      });
-  
-      setBidCounts([...bidCounts]);
-      maximumBid();
-    } catch (error) {
-      console.error('Error submitting bid:', error);
-    }
-  };
-
-  const handleBidSubmitWithoutPaper = async (event) => {
-    event.preventDefault();
-    
-    // Retrieve the JWT token from local storage or another secure location
     const token = localStorage.getItem('jwtToken');
+    const url = isBidWithPaper ? `${BASE_URL}/bids` : `${BASE_URL}/bids/withoutPaper`;
   
     try {
       const response = await axios.post(
-        `${BASE_URL}/bids/withoutPaper`,
+        url,
         {
           carId: selectedCar.id,
-          amount: bidAmount
+          amount: bidAmount,
         },
         {
           headers: {
-            'Authorization': `Bearer ${token}`, // Set the Authorization header with the JWT token
-            'Content-Type': 'application/json' // Optional: Specify the content type if needed
-          }
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
         }
       );
   
       console.log('Bid submitted:', response.data);
   
-      bidCountWithoutPaper.forEach((ele) => {
-        if (ele.carId === selectedCar.id) {
-          ele.bidCount++;
-        }
-      });
-  
-      setBidCountWithoutPaper([...bidCountWithoutPaper]);
-      handleCloseBidModal();
+      const updatedBidCounts = isBidWithPaper ? bidCounts : bidCountWithoutPaper;
+      const updateBidCounts = updatedBidCounts.map((ele) =>
+        ele.carId === selectedCar.id ? { ...ele, bidCount: ele.bidCount + 1 } : ele
+      );
+
+      if (isBidWithPaper) {
+        setBidCounts(updateBidCounts);
+      } else {
+        setBidCountWithoutPaper(updateBidCounts);
+      }
+
+      const isMaxBid = response.data.isMaxBid;
+      if (isMaxBid) {
+        setMaxBid(`🎉 Congratulations! You are currently winning this car with a bid of ${bidAmount}! 🚗👑`);
+      } else {
+        setMaxBid(`📉 Your bid of ${bidAmount} was placed, but you are not currently winning this car. 😔`);
+      }
     } catch (error) {
       console.error('Error submitting bid:', error);
+      setMaxBid('❌ There was an error placing your bid. Please try again. 🔄');
     }
   };
 
   const isBidLimitReached = (carId) => getBidCount(carId) >= 20;
   const isBidLimitReachedWithoutPaper = (carId) => getBidCountWithoutPaper(carId) >= 20;
 
-  const maximumBid = async () => {
-    console.log('Selected Car ID:', selectedCar.id);
-    console.log('Bid Amount:', bidAmount);
-  
-    try {
-      const response = await axios.get(`${BASE_URL}/maximum/amount/${selectedCar.id}/${bidAmount}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-  
-      console.log('API Response:', response.data);
-  
-      setMaxBid(response.data ? 'true' : 'false');
-    } catch (error) {
-      console.error('Error fetching maximum bid amount:', error);
-      setMaxBid('false');
-    }
-  };      
-
   return (
     <div className="font-source-sans-pro bg-white min-h-screen">
-    <MainHeader/>
+      <MainHeader />
       
       <section className="bg-cover bg-center h-96 bg-no-repeat relative" style={{ backgroundImage: 'url(https://www.infinity-group.in/wp-content/uploads/2021/07/5-Benefits-of-Buying-A-Pre-Owned-Luxury-Car.jpg)' }}>
         <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-50"></div>
@@ -187,7 +130,7 @@ const FrontPage = () => {
                 handleOpenBidModal={handleOpenBidModal}
                 getBidCount={getBidCount}
                 isBidLimitReached={isBidLimitReached}
-                handleOpenWithoutPaperBidModal={handleOpenWithoutPaperBidModal}
+                handleOpenWithoutPaperBidModal={handleOpenBidModal} // Modified to use the same function
                 getBidCountWithoutPaper={getBidCountWithoutPaper}
                 isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
               />
@@ -218,33 +161,7 @@ const FrontPage = () => {
                 <button type="button" className="bg-gray-500 text-white rounded-full px-4 py-2 mr-2" onClick={handleCloseBidModal}>Cancel</button>
                 <button type="submit" className="bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700">Submit Bid</button>
               </div>
-              <div>{maxBid}</div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {openBidModelWithoutPaper && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-md p-8 max-w-md mx-auto">
-            <h2 className="text-xl font-bold mb-4">Place Your Bid for {selectedCar.carName}</h2>
-            <form onSubmit={handleBidSubmitWithoutPaper}>
-              <div className="mb-4">
-                <label htmlFor="bidAmount" className="block text-gray-700 font-bold mb-2">Bid Amount</label>
-                <input
-                  type="number"
-                  id="bidAmount"
-                  value={bidAmount}
-                  onChange={(e) => setBidAmount(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-                  required
-                />
-              </div>
-              <div className="flex justify-between">
-                <button type="button" className="bg-gray-500 text-white rounded-full px-4 py-2 mr-2" onClick={handleCloseBidModal}>Cancel</button>
-                <button type="submit" className="bg-blue-600 text-white rounded-full px-4 py-2 hover:bg-blue-700">Submit Bid</button>
-              </div>
-              <div>{maxBid}</div>
+              <div className="text-center mt-4 text-gray-700 font-semibold">{maxBid}</div>
             </form>
           </div>
         </div>
