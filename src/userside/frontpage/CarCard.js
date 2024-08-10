@@ -7,11 +7,15 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import TimerIcon from '@mui/icons-material/Timer';
 import DescriptionIcon from '@mui/icons-material/Description'; // Icon for "Bid with Paper"
 import CloudOffIcon from '@mui/icons-material/CloudOff'; // Icon for "Bid without Paper"
-import axios from 'axios';
 
-const CarCard = ({ car, handleOpenBidModal, handleOpenWithoutPaperBidModal, getBidCount, isBidLimitReached, getBidCountWithoutPaper, isBidLimitReachedWithoutPaper }) => {
-
-
+const CarCard = ({
+  car,
+  handleOpenBidModal,
+  getBidCount,
+  isBidLimitReached,
+  getBidCountWithoutPaper,
+  isBidLimitReachedWithoutPaper,
+}) => {
   const [remainingTime, setRemainingTime] = useState(calculateRemainingTime(car.auctionEndTime));
 
   function calculateRemainingTime(endTime) {
@@ -48,24 +52,36 @@ const CarCard = ({ car, handleOpenBidModal, handleOpenWithoutPaperBidModal, getB
       )}
       <div className="p-4">
         <h3 className="text-xl font-bold mb-2">{car.carName}</h3>
-        <p className="text-gray-600 mb-2"><DirectionsCarFilledIcon /> MFG Year: {car.modelNumber}</p>
-        <p className="text-gray-600 mb-2"><LocalGasStationIcon /> Fuel Type: {car.fuelType}</p>
-        <p className="text-gray-600 mb-2"><SettingsApplicationsIcon /> Transmission: {car.transmissionType}</p>
-        <p className="text-gray-600 mb-4"><AppRegistrationIcon /> Registration Number: {car.registrationNumber}</p>
+        <p className="text-gray-600 mb-2">
+          <DirectionsCarFilledIcon /> MFG Year: {car.modelNumber}
+        </p>
+        <p className="text-gray-600 mb-2">
+          <LocalGasStationIcon /> Fuel Type: {car.fuelType}
+        </p>
+        <p className="text-gray-600 mb-2">
+          <SettingsApplicationsIcon /> Transmission: {car.transmissionType}
+        </p>
+        <p className="text-gray-600 mb-4">
+          <AppRegistrationIcon /> Registration Number: {car.registrationNumber}
+        </p>
         <div className="mt-2 mb-2">
           <TimerIcon /> Auction Ends In: {remainingTime}
         </div>
         <div className="mb-2">
           <button
-            className={`bg-red-600 text-white rounded-full px-4 py-2 flex items-center mb-2 justify-center w-full hover:bg-red-700 ${isBidLimitReached(car.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={() => handleOpenBidModal(car)}
+            className={`bg-red-600 text-white rounded-full px-4 py-2 flex items-center mb-2 justify-center w-full hover:bg-red-700 ${
+              isBidLimitReached(car.id) ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={() => handleOpenBidModal(car, true)} // Bid with Paper
             disabled={isBidLimitReached(car.id)}
           >
             <DescriptionIcon className="mr-2" /> Bid with Paper - {getBidCount(car.id)}/20
           </button>
           <button
-            className={`bg-blue-600 text-white rounded-full px-4 py-2 flex items-center justify-center w-full hover:bg-blue-700 ${isBidLimitReachedWithoutPaper(car.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={() => handleOpenWithoutPaperBidModal(car)}
+            className={`bg-blue-600 text-white rounded-full px-4 py-2 flex items-center justify-center w-full hover:bg-blue-700 ${
+              isBidLimitReachedWithoutPaper(car.id) ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={() => handleOpenBidModal(car, false)} // Bid without Paper
             disabled={isBidLimitReachedWithoutPaper(car.id)}
           >
             <CloudOffIcon className="mr-2" /> Bid without Paper - {getBidCountWithoutPaper(car.id)}/20
