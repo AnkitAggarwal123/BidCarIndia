@@ -13,6 +13,7 @@ const FrontPage = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
   const [maxBid, setMaxBid] = useState('');
+  const [showAllCars, setShowAllCars] = useState(false); // Track if user is logged in and wants to see all cars
   const { user, bidCounts, setBidCounts, bidCountWithoutPaper, setBidCountWithoutPaper } = useAuth();
   const navigate = useNavigate();
 
@@ -121,23 +122,29 @@ const FrontPage = () => {
         </div>
       </section>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {cars.length > 0 ? (
-          <div className="flex flex-wrap justify-center -m-4">
-            {cars.map((car) => (
-              <CarCard
-                key={car.id}
-                car={car}
-                handleOpenBidModal={handleOpenBidModal}
-                getBidCount={getBidCount}
-                isBidLimitReached={isBidLimitReached}
-                handleOpenWithoutPaperBidModal={handleOpenBidModal} // Modified to use the same function
-                getBidCountWithoutPaper={getBidCountWithoutPaper}
-                isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
-              />
-            ))}
+        <div className={`flex flex-wrap justify-center -m-4 ${!user && !showAllCars ? 'blur-sm' : ''}`}>
+          {(user || showAllCars ? cars : cars.slice(0, 3)).map((car) => (
+            <CarCard
+              key={car.id}
+              car={car}
+              handleOpenBidModal={handleOpenBidModal}
+              getBidCount={getBidCount}
+              isBidLimitReached={isBidLimitReached}
+              handleOpenWithoutPaperBidModal={handleOpenBidModal} // Modified to use the same function
+              getBidCountWithoutPaper={getBidCountWithoutPaper}
+              isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
+            />
+          ))}
+        </div>
+        {!user && cars.length > 2 && !showAllCars && (
+          <div className="text-center mt-6">
+            <a
+              href="/login"
+              className="text-blue-600 hover:text-blue-800 text-lg font-semibold"
+            >
+              View All Cars
+            </a>
           </div>
-        ) : (
-          <div className='text-black text-center text-2xl'>No car listed</div>
         )}
       </main>
 
