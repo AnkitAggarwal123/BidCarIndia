@@ -123,7 +123,7 @@ const FrontPage = () => {
       </section>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className={`flex flex-wrap justify-center -m-4 ${!user && !showAllCars ? 'blur-sm' : ''}`}>
-          {(user || showAllCars ? cars : cars.slice(0, 3)).map((car) => (
+          {(user || showAllCars ? cars : cars.slice(0, 6)).map((car) => (
             <CarCard
               key={car.id}
               car={car}
