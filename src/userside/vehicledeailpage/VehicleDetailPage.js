@@ -6,6 +6,7 @@ import { LocationOn, Commute, LocalGasStation, AccountBalance, Details } from '@
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
 import { BASE_URL } from '../../config/Config';
+import jsPDF from 'jspdf';
 
 const styles = {
   paper: {
@@ -71,11 +72,11 @@ const VehicleDetailPage = () => {
   const handleBidSubmit = async (event) => {
     event.preventDefault();
 
-    setMaxBid('')
-  
+    setMaxBid('');
+
     const token = localStorage.getItem('jwtToken');
     const url = isBidWithPaper ? `${BASE_URL}/bids` : `${BASE_URL}/bids/withoutPaper`;
-  
+
     try {
       const response = await axios.post(
         url,
@@ -90,9 +91,9 @@ const VehicleDetailPage = () => {
           },
         }
       );
-  
+
       console.log('Bid submitted:', response.data);
-  
+
       const updatedBidCounts = isBidWithPaper ? bidCounts : bidCountWithoutPaper;
       const updateBidCounts = updatedBidCounts.map((ele) =>
         ele.carId === car.id ? { ...ele, bidCount: ele.bidCount + 1 } : ele
@@ -129,6 +130,65 @@ const VehicleDetailPage = () => {
     return bidCountObj ? bidCountObj.bidCount : 0;
   };
 
+  // New PDF download function
+  const handleDownloadPDF = async () => {
+    const doc = new jsPDF('p', 'mm', 'a4'); // A4 size in mm (portrait)
+    const pageWidth = doc.internal.pageSize.getWidth(); // Page width in mm
+    const pageHeight = doc.internal.pageSize.getHeight(); // Page height in mm
+    const margin = 10; // Margin on each side in mm
+    const availableWidth = pageWidth - 2 * margin; // Available width after margins
+    let currentYPosition = margin; // Starting Y position for the first image
+  
+    // Load images and add to PDF in sequence
+    for (let i = 0; i < car.imageUrls.length; i++) {
+      const imgUrl = car.imageUrls[i];
+  
+      // This function handles loading and adding each image
+      await loadAndAddImageToPDF(imgUrl);
+    }
+  
+    // Save the PDF after all images are added
+    doc.save(`${car.registrationNumber}_photos.pdf`);
+  
+    // Function to handle loading and adding image to the PDF
+    async function loadAndAddImageToPDF(imgUrl) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = imgUrl;
+  
+        img.onload = function () {
+          const imgAspectRatio = img.naturalWidth / img.naturalHeight;
+          const imgHeight = availableWidth / imgAspectRatio; // Scale height based on available width
+          const imgWidth = availableWidth; // Image width (fits within the available width)
+  
+          // Calculate the X position to center the image horizontally
+          const centerXPosition = (pageWidth - imgWidth) / 2;
+  
+          // Check if the image fits on the current page, else add a new page
+          if (currentYPosition + imgHeight > pageHeight - margin) {
+            doc.addPage();
+            currentYPosition = (pageHeight - imgHeight) / 2; // Center vertically on the new page
+          } else {
+            currentYPosition = (pageHeight - imgHeight) / 2; // Center vertically for the first image
+          }
+  
+          // Add the image to the PDF at the calculated center position
+          doc.addImage(img, 'PNG', centerXPosition, currentYPosition, imgWidth, imgHeight);
+  
+          // Update Y position for the next image
+          currentYPosition += imgHeight + 5; // Add 5mm space between images
+  
+          resolve();
+        };
+  
+        img.onerror = function () {
+          reject(new Error(`Failed to load image: ${imgUrl}`));
+        };
+      });
+    }
+  };
+  
+  
   return (
     <Paper elevation={3} style={styles.paper}>
       <Grid container spacing={3}>
@@ -204,6 +264,15 @@ const VehicleDetailPage = () => {
             disabled={isBidLimitReachedWithoutPaper()}
           >
             Bid without Paper ({getBidCountWithoutPaper()}/20)
+          </Button>
+          {/* New Download Button */}
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleDownloadPDF}
+            style={{ marginLeft: '10px' }}
+          >
+            Download All Photos
           </Button>
         </Grid>
       </Grid>
