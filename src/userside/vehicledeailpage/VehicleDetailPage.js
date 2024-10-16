@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Grid, Typography, Paper, Box, Button } from '@mui/material';
+import { Grid, Typography, Paper, Box, Button, CircularProgress } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { LocationOn, Commute, LocalGasStation, AccountBalance, Details } from '@mui/icons-material';
+import { LocationOn, Commute, LocalGasStation, AccountBalance, Details, GetApp } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
 import { BASE_URL } from '../../config/Config';
@@ -40,6 +40,9 @@ const styles = {
     maxHeight: 400,
     borderRadius: 8,
   },
+  downloadButton: {
+    marginTop: '20px',
+  },
 };
 
 const VehicleDetailPage = () => {
@@ -52,6 +55,8 @@ const VehicleDetailPage = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
   const [maxBid, setMaxBid] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading
+
 
   const handleOpenBidModal = (withPaper) => {
     if (user) {
@@ -129,6 +134,28 @@ const VehicleDetailPage = () => {
     return bidCountObj ? bidCountObj.bidCount : 0;
   };
 
+  const handleDownloadImages = async () => {
+    setLoading(true); // Set loading to true when download starts
+    try {
+      const response = await axios.get(`${BASE_URL}/api/download/image/${car.id}`, {
+        responseType: 'blob', // Ensure the response is treated as a binary file (Blob)
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${car.carName}-${car.registrationNumber}.pdf`); // Set the download file name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Clean up the link element after the download
+    } catch (error) {
+      console.error('Error downloading images:', error);
+    } finally {
+      setLoading(false); // Set loading to false after download completes or fails
+    }
+  };
+
+
   return (
     <Paper elevation={3} style={styles.paper}>
       <Grid container spacing={3}>
@@ -205,6 +232,17 @@ const VehicleDetailPage = () => {
           >
             Bid without Paper ({getBidCountWithoutPaper()}/20)
           </Button>
+          <Grid item xs={12} style={styles.downloadButton}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={loading ? <CircularProgress size={24} color="inherit" /> : <GetApp />}
+            onClick={handleDownloadImages}
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? 'Downloading...' : 'Download Images'}
+          </Button>
+        </Grid>
         </Grid>
       </Grid>
 
