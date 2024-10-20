@@ -14,6 +14,7 @@ const FrontPage = () => {
   const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
   const [maxBid, setMaxBid] = useState('');
   const [showAllCars, setShowAllCars] = useState(false); // Track if user is logged in and wants to see all cars
+  const [loading, setLoading] = useState(true); // Track loading state
   const { user, bidCounts, setBidCounts, bidCountWithoutPaper, setBidCountWithoutPaper } = useAuth();
   const navigate = useNavigate();
 
@@ -25,6 +26,8 @@ const FrontPage = () => {
         setCars(visibleCars);
       } catch (error) {
         console.error('Error fetching car data:', error);
+      } finally {
+        setLoading(false); // Set loading to false once data is fetched
       }
     };
     fetchData();
@@ -57,7 +60,6 @@ const FrontPage = () => {
   const handleCloseBidModal = () => {
     setOpenBidModal(false);
     setBidAmount('');
-    setMaxBid('');
     setSelectedCar(null);
   };
 
@@ -121,21 +123,29 @@ const FrontPage = () => {
           <p className="text-xl">Bid With Us, Grow With Us</p>
         </div>
       </section>
+      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className={`flex flex-wrap justify-center -m-4 ${!user && !showAllCars ? 'blur-sm' : ''}`}>
-          {(user || showAllCars ? cars : cars.slice(0, 6)).map((car) => (
-            <CarCard
-              key={car.id}
-              car={car}
-              handleOpenBidModal={handleOpenBidModal}
-              getBidCount={getBidCount}
-              isBidLimitReached={isBidLimitReached}
-              handleOpenWithoutPaperBidModal={handleOpenBidModal} // Modified to use the same function
-              getBidCountWithoutPaper={getBidCountWithoutPaper}
-              isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-48">
+            <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        ) : (
+          <div className={`flex flex-wrap justify-center -m-4 ${!user && !showAllCars ? 'blur-sm' : ''}`}>
+            {(user || showAllCars ? cars : cars.slice(0, 6)).map((car) => (
+              <CarCard
+                key={car.id}
+                car={car}
+                handleOpenBidModal={handleOpenBidModal}
+                getBidCount={getBidCount}
+                isBidLimitReached={isBidLimitReached}
+                handleOpenWithoutPaperBidModal={handleOpenBidModal} // Modified to use the same function
+                getBidCountWithoutPaper={getBidCountWithoutPaper}
+                isBidLimitReachedWithoutPaper={isBidLimitReachedWithoutPaper}
+              />
+            ))}
+          </div>
+        )}
+        
         {!user && cars.length > 2 && !showAllCars && (
           <div className="text-center mt-6">
             <a
@@ -159,7 +169,7 @@ const FrontPage = () => {
                   type="number"
                   id="bidAmount"
                   value={bidAmount}
-                  onChange={(e)=>{setBidAmount(e.target.value)}}
+                  onChange={(e) => setBidAmount(e.target.value)}
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
                   required
                 />
