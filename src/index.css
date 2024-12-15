@@ -38,6 +38,12 @@ body,
   background: #555;
 }
 
+/* Add to your global styles if necessary */
+.spinner {
+  @apply animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-blue-500;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Grid, Typography, Paper, Box, Button } from '@mui/material';
+import { Grid, Typography, Paper, Box, Button, CircularProgress } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import { LocationOn, Commute, LocalGasStation, AccountBalance, Details } from '@mui/icons-material';
+import { LocationOn, Commute, LocalGasStation, AccountBalance, Details, GetApp } from '@mui/icons-material';
 import axios from 'axios';
 import { useAuth } from '../../contextAuth/AuthContext';
 import { BASE_URL } from '../../config/Config';
@@ -41,6 +41,9 @@ const styles = {
     maxHeight: 400,
     borderRadius: 8,
   },
+  downloadButton: {
+    marginTop: '20px',
+  },
 };
 
 const VehicleDetailPage = () => {
@@ -53,6 +56,8 @@ const VehicleDetailPage = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [isBidWithPaper, setIsBidWithPaper] = useState(true); // Track bid type
   const [maxBid, setMaxBid] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading
+
 
   const handleOpenBidModal = (withPaper) => {
     if (user) {
