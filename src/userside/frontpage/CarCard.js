@@ -48,7 +48,7 @@ const CarCard = ({
   }, [car.auctionEndTime]);
 
   return (
-    <div className={`bg-white shadow-lg rounded-md overflow-hidden m-4 w-80 ${!user ? 'filter blur-sm' : ''}`}>
+    <div className={`bg-white shadow-lg rounded-md overflow-hidden m-4 w-80 flex flex-col justify-around ${!user ? 'filter blur-sm' : ''}`}>
       {car.imageUrls && car.imageUrls.length > 0 && (
         <img src={car.imageUrls[0]} alt={car.carName} className="w-full h-52 object-cover" />
       )}
