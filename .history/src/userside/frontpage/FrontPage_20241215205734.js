@@ -147,74 +147,76 @@ const FrontPage = () => {
           <p className="text-xl">Bid With Us, Grow With Us</p>
         </div>
       </section>
-      <div className="bg-black text-white py-16 px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <div
+        className="bg-black text-white py-16 px-8 flex bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage:
+            'url("https://wallpapercat.com/w/full/5/b/6/1756484-2560x1600-desktop-hd-rolls-royce-cullinan-wallpaper-photo.jpg")',
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
           <h3 className="text-red-500 text-lg font-semibold uppercase">
             Who We Are ?
           </h3>
-          <h1 className="text-5xl font-bold mt-4">
-            Welcome to Spartan Salvage
-          </h1>
-          <p className="mt-6 text-gray-300 max-w-3xl mx-auto">
-            At Spartan Salvage, we are pioneers in the realm of salvage
-            auctions, dedicated to providing a platform where individuals and
-            businesses can find remarkable deals on salvage vehicles. With a
-            commitment to transparency, integrity, and excellence, we offer a
-            unique marketplace where buyers can bid confidently. Our team is
-            passionate about connecting buyers and sellers, fostering fair
-            competition. Spartan Salvage is your trusted partner in the world of
-            salvage auctions.
+          <h1 className="text-5xl font-bold mt-4">Welcome to Bid Cars India</h1>
+          <p className="mt-6 font-bold text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            At Bids Car India, we are revolutionizing the automobile auction
+            industry, offering a dynamic platform where buyers and sellers
+            connect seamlessly for exceptional deals on vehicles. With a
+            steadfast commitment to transparency, innovation, and customer
+            satisfaction, we empower individuals and businesses to bid with
+            confidence. Our passion lies in creating a fair and competitive
+            marketplace that bridges the gap between vehicle owners and aspiring
+            buyers. At Bids Car India, we are your trusted partner, redefining
+            the future of automobile auctions with integrity and excellence.
           </p>
         </div>
 
         {/* Vehicle Categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
-          <div className="bg-white text-center py-8 rounded-lg shadow-lg">
-            <img
-              src="https://path/to/sedan-image.png"
-              alt="Sedan"
-              className="mx-auto mb-4"
-            />
-            <h2 className="text-xl font-semibold">Sedan</h2>
-          </div>
-          <div className="bg-white text-center py-8 rounded-lg shadow-lg">
-            <img
-              src="https://path/to/ertiga-image.png"
-              alt="Ertiga"
-              className="mx-auto mb-4"
-            />
-            <h2 className="text-xl font-semibold">Ertiga</h2>
-          </div>
-          <div className="bg-white text-center py-8 rounded-lg shadow-lg">
-            <img
-              src="https://path/to/cabriolet-image.png"
-              alt="Cabriolet"
-              className="mx-auto mb-4"
-            />
-            <h2 className="text-xl font-semibold">Cabriolet</h2>
-          </div>
-        </div>
-
-        {/* Floating Buttons */}
-        <div className="fixed bottom-4 right-4 flex flex-col space-y-4">
-          <a
-            href="https://wa.me/1234567890"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-green-500 p-4 rounded-full text-white shadow-lg"
-          >
-            <FaWhatsapp size={24} />
-          </a>
-          <a
-            href="#top"
-            className="bg-red-500 p-4 rounded-full text-white shadow-lg"
-          >
-            <FaArrowUp size={24} />
-          </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto cursor-pointer">
+          {[
+            {
+              src: "https://images.tv9hindi.com/wp-content/uploads/2022/05/kia-sedan-car.jpg",
+              name: "Sedan",
+            },
+            {
+              src: "https://stimg.cardekho.com/images/carexteriorimages/930x620/Maruti/Ertiga/10293/1687252933647/rear-left-view-121.jpg",
+              name: "Ertiga",
+            },
+            {
+              src: "https://imgd.aeplcdn.com/664x374/n/cw/ec/44709/fortuner-exterior-right-front-three-quarter-20.jpeg?isig=0&q=80",
+              name: "SUV",
+            },
+            {
+              src: "https://akm-img-a-in.tosshub.com/indiatoday/images/story/202408/mahindra-thar-roxx-200912599-16x9_0.jpg?VersionId=8gFUdclSl6.epCT95iSrtU5MCXzyDyRR&size=690:388",
+              name: "Thar",
+            },
+            {
+              src: "https://static1.topspeedimages.com/wordpress/wp-content/uploads/2023/01/mercedes-g-wagen.jpg?q=70&fit=crop&w=1140&h=&dpr=1",
+              name: "G-Wagon",
+            },
+            {
+              src: "https://cdn.motor1.com/images/mgl/zxVvnK/s1/mercedes-amg-cle-53-cabriolet-2024.webp",
+              name: "Cabriolet",
+            },
+          ].map((car, index) => (
+            <div
+              key={index}
+              className="relative bg-white text-center rounded-lg shadow-lg overflow-hidden ... transform-3d rotate-x-51 rotate-z-43 transition-all duration-500 hover:-translate-y-4 hover:rotate-x-49 hover:rotate-z-38 hover:shadow-2xl"
+            >
+              <img
+                src={car.src}
+                alt={car.name}
+                className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h2 className="text-white text-xl font-semibold">{car.name}</h2>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div
           className={`flex flex-wrap justify-center -m-4 ${
@@ -236,12 +238,12 @@ const FrontPage = () => {
         </div>
         {!user && cars.length > 2 && !showAllCars && (
           <div className="text-center mt-6">
-            <a
-              href="/login"
-              className="text-blue-600 hover:text-blue-800 text-lg font-semibold"
+            <button
+              onClick={() => (window.location.href = "/login")}
+              className="text-white rounded-full px-4 sm:px-6 py-2 font-bold bg-blue-800 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300"
             >
               View All Cars
-            </a>
+            </button>
           </div>
         )}
       </main>
