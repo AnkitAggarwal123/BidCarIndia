@@ -135,64 +135,26 @@ const VehicleDetailPage = () => {
     return bidCountObj ? bidCountObj.bidCount : 0;
   };
 
-  // New PDF download function
-  const handleDownloadPDF = async () => {
-    const doc = new jsPDF('p', 'mm', 'a4'); // A4 size in mm (portrait)
-    const pageWidth = doc.internal.pageSize.getWidth(); // Page width in mm
-    const pageHeight = doc.internal.pageSize.getHeight(); // Page height in mm
-    const margin = 10; // Margin on each side in mm
-    const availableWidth = pageWidth - 2 * margin; // Available width after margins
-    let currentYPosition = margin; // Starting Y position for the first image
-  
-    // Load images and add to PDF in sequence
-    for (let i = 0; i < car.imageUrls.length; i++) {
-      const imgUrl = car.imageUrls[i];
-  
-      // This function handles loading and adding each image
-      await loadAndAddImageToPDF(imgUrl);
-    }
-  
-    // Save the PDF after all images are added
-    doc.save(`${car.registrationNumber}_photos.pdf`);
-  
-    // Function to handle loading and adding image to the PDF
-    async function loadAndAddImageToPDF(imgUrl) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = imgUrl;
-  
-        img.onload = function () {
-          const imgAspectRatio = img.naturalWidth / img.naturalHeight;
-          const imgHeight = availableWidth / imgAspectRatio; // Scale height based on available width
-          const imgWidth = availableWidth; // Image width (fits within the available width)
-  
-          // Calculate the X position to center the image horizontally
-          const centerXPosition = (pageWidth - imgWidth) / 2;
-  
-          // Check if the image fits on the current page, else add a new page
-          if (currentYPosition + imgHeight > pageHeight - margin) {
-            doc.addPage();
-            currentYPosition = (pageHeight - imgHeight) / 2; // Center vertically on the new page
-          } else {
-            currentYPosition = (pageHeight - imgHeight) / 2; // Center vertically for the first image
-          }
-  
-          // Add the image to the PDF at the calculated center position
-          doc.addImage(img, 'PNG', centerXPosition, currentYPosition, imgWidth, imgHeight);
-  
-          // Update Y position for the next image
-          currentYPosition += imgHeight + 5; // Add 5mm space between images
-  
-          resolve();
-        };
-  
-        img.onerror = function () {
-          reject(new Error(`Failed to load image: ${imgUrl}`));
-        };
+  const handleDownloadImages = async () => {
+    setLoading(true); // Set loading to true when download starts
+    try {
+      const response = await axios.get(`${BASE_URL}/api/download/image/${car.id}`, {
+        responseType: 'blob', // Ensure the response is treated as a binary file (Blob)
       });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${car.carName}-${car.registrationNumber}.pdf`); // Set the download file name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); // Clean up the link element after the download
+    } catch (error) {
+      console.error('Error downloading images:', error);
+    } finally {
+      setLoading(false); // Set loading to false after download completes or fails
     }
   };
-  
   
   return (
     <Paper elevation={3} style={styles.paper}>
@@ -273,11 +235,13 @@ const VehicleDetailPage = () => {
           {/* New Download Button */}
           <Button
             variant="contained"
-            color="success"
-            onClick={handleDownloadPDF}
+            color="primary"
+            startIcon={loading ? <CircularProgress size={24} color="inherit" /> : <GetApp />}
+            onClick={handleDownloadImages}
+            disabled={loading} // Disable button while loading
             style={{ marginLeft: '10px' }}
           >
-            Download All Photos
+            {loading ? 'Downloading...' : 'Download Images'}
           </Button>
         </Grid>
       </Grid>
