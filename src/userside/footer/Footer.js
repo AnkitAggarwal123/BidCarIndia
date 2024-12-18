@@ -50,8 +50,8 @@ function Footer() {
           <div className="w-full md:w-1/4 mb-6 md:mb-0">
             <h3 className="text-lg font-bold">Contact Info</h3>
             <p className="mt-2"><i className="fas fa-map-marker-alt"></i> West Delhi</p>
-            <p className="mt-2"><i className="fas fa-envelope"></i> Auction@Spartansalvage.com</p>
-            <p className="mt-2"><i className="fas fa-phone"></i> +91 99530 98590</p>
+            <p className="mt-2"><i className="fas fa-envelope"></i>auction@bidcarsindia.com</p>
+            <p className="mt-2"><i className="fas fa-phone"></i>+91 8882451292</p>
           </div>
         </div>
       </div>

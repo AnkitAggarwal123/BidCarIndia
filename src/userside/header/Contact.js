@@ -81,7 +81,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-1">Email</h3>
-                <p className="text-gray-600">info@bidcarsindia.com<br />support@bidcarsindia.com</p>
+                <p className="text-gray-600">auction@bidcarsindia.com</p>
               </div>
             </div>
 
@@ -93,7 +93,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-1">Phone</h3>
-                <p className="text-gray-600">+91 11 2345 6789<br />+91 98765 43210</p>
+                <p className="text-gray-600">+91 8882451292</p>
               </div>
             </div>
           </div>
