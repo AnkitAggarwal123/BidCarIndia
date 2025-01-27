@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import logo from "./BidCarsIMG-removebg-preview.png";
-// import logo2 from
+// import logo2 from 
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../contextAuth/AuthContext"; // Adjust the path as needed
 import { Menu, MenuItem, IconButton, Typography, Drawer } from "@mui/material";
@@ -8,26 +8,19 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const MainHeader = () => {
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [active, setActive] = useState();
-  const location = useLocation();
-
-  // Scroll to the top whenever the path changes
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(null);wa
   };
 
   const handleLogout = () => {
@@ -53,49 +46,41 @@ export const MainHeader = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden sm:flex">
-          <ul className="flex justify-center gap-10 hover:cursor-pointer">
-            <li
-              className={`${
-                active === "HOME"
-                  ? "text-fuchsia-800 scale-125"
-                  : "text-secondary scale-100"
-              } hover:text-fuchsia-800 hover:scale-125 transition-transform duration-500 ease-in-out`}
-              onClick={() => setActive("HOME")}
-            >
-              <Link to="/">HOME</Link>
-            </li>
-            <li
-              className={`${
-                active === "ABOUT US"
-                  ? "text-fuchsia-800 scale-125"
-                  : "text-secondary scale-100"
-              } hover:text-fuchsia-800 hover:scale-125 transition-transform duration-500 ease-in-out`}
-              onClick={() => setActive("ABOUT US")}
-            >
-              <Link to="/about">ABOUT US</Link>
-            </li>
-            <li
-              className={`${
-                active === "SERVICES"
-                  ? "text-fuchsia-800 scale-125"
-                  : "text-secondary scale-100"
-              } hover:text-fuchsia-800 hover:scale-125 transition-transform duration-500 ease-in-out`}
-              onClick={() => setActive("SERVICES")}
-            >
-              <Link to="/service">SERVICES</Link>
-            </li>
-            <li
-              className={`${
-                active === "CONTACT US"
-                  ? "text-fuchsia-800 scale-125"
-                  : "text-secondary scale-100"
-              } hover:text-fuchsia-800 hover:scale-125 transition-transform duration-500 ease-in-out`}
-              onClick={() => setActive("CONTACT US")}
-            >
-              <Link to="/contact">CONTACT US</Link>
-            </li>
-          </ul>
-        </nav>
+  <ul className="flex justify-center gap-10 hover:cursor-pointer">
+    <li
+      className={`${
+        active === "HOME" ? "text-fuchsia-800" : "text-secondary"
+      } hover:text-fuchsia-800 transition-transform duration-500 ease-in-out scale-100 hover:scale-125`}
+      onClick={() => setActive("HOME")}
+    >
+      <Link to="/">HOME</Link>
+    </li>
+    <li
+      className={`${
+        active === "ABOUT US" ? "text-fuchsia-800" : "text-secondary"
+      } hover:text-fuchsia-800 transition-transform duration-500 ease-in-out scale-100 hover:scale-125`}
+      onClick={() => setActive("ABOUT US")}
+    >
+      <Link to="/about">ABOUT US</Link>
+    </li>
+    <li
+      className={`${
+        active === "SERVICES" ? "text-fuchsia-800" : "text-secondary"
+      } hover:text-fuchsia-800 transition-transform duration-500 ease-in-out scale-100 hover:scale-125`}
+      onClick={() => setActive("SERVICES")}
+    >
+      <Link to="/service">SERVICES</Link>
+    </li>
+    <li
+      className={`${
+        active === "CONTACT US" ? "text-fuchsia-800" : "text-secondary"
+      } hover:text-fuchsia-800 transition-transform duration-500 ease-in-out scale-100 hover:scale-125`}
+      onClick={() => setActive("CONTACT US")}
+    >
+      <Link to="/contact">CONTACT US</Link>
+    </li>
+  </ul>
+</nav>
 
         {/* Mobile Menu Toggle */}
         <div className="sm:hidden">

@@ -180,7 +180,7 @@ const RegistrationPage = () => {
                 type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm mt-2"
+                className="appearance-none rounded-none relative w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm mt-2"
                 placeholder="Confirm Password"
                 value={form.confirmPassword}
                 onChange={handleChange}

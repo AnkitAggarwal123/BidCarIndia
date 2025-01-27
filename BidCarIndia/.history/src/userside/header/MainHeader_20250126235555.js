@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import logo from "./BidCarsIMG-removebg-preview.png";
 // import logo2 from
 import { NavLink } from "react-router-dom";
@@ -8,19 +8,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const MainHeader = () => {
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [active, setActive] = useState();
-  const location = useLocation();
-
-  // Scroll to the top whenever the path changes
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+  const [active, setActive] = useState("HOME");
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

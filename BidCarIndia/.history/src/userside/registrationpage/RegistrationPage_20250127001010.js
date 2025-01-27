@@ -162,22 +162,22 @@ const RegistrationPage = () => {
                 value={form.password}
                 onChange={handleChange}
               />
-              <span
-                className="flex justify-end cursor-pointer"
+              {/* <span
+                className="relative inset-y-0 right-0 items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}
-              </span>
+              </span> */}
             </div>
             {/* Confirm Password Input */}
             <div>
               <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password 
+                Confirm Password
               </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
+                type="password"
                 autoComplete="new-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm mt-2"
@@ -186,7 +186,7 @@ const RegistrationPage = () => {
                 onChange={handleChange}
               />
               <span
-                className="flex justify-end cursor-pointer"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? "Hide" : "Show"}

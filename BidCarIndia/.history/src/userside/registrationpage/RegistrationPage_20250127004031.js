@@ -172,7 +172,13 @@ const RegistrationPage = () => {
             {/* Confirm Password Input */}
             <div>
               <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password 
+                Confirm Password &nbsp;
+                <span
+                  className="flex justify-end cursor-pointer"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </span>
               </label>
               <input
                 id="confirmPassword"
@@ -185,12 +191,12 @@ const RegistrationPage = () => {
                 value={form.confirmPassword}
                 onChange={handleChange}
               />
-              <span
+              {/* <span
                 className="flex justify-end cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? "Hide" : "Show"}
-              </span>
+              </span> */}
             </div>
           </div>
 
