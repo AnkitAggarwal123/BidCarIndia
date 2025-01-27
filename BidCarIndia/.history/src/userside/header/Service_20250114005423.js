@@ -90,7 +90,7 @@ const Service = () => {
             <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-60 transition duration-300"></div>
 
             {/* Content */}
-            <div className="relative z-5 p-6 flex flex-col justify-end h-full">
+            <div className="relative z-10 p-6 flex flex-col justify-end h-full">
               <h3 className="text-2xl font-semibold text-white mb-2 group-hover:translate-y-[-10px] group-hover:opacity-100 transform opacity-90 transition-all duration-300">
                 {service.title}
               </h3>

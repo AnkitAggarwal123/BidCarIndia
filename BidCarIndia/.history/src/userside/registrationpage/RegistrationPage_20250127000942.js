@@ -163,7 +163,7 @@ const RegistrationPage = () => {
                 onChange={handleChange}
               />
               <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                className="relative inset-y-0 right-0 items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? "Hide" : "Show"}

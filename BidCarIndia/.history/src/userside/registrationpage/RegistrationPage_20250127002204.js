@@ -149,7 +149,13 @@ const RegistrationPage = () => {
             {/* Password Input */}
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                Password 
+                <span
+                className="flex justify-end cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </span>
               </label>
               <input
                 id="password"
@@ -162,22 +168,17 @@ const RegistrationPage = () => {
                 value={form.password}
                 onChange={handleChange}
               />
-              <span
-                className="flex justify-end cursor-pointer"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </span>
+              
             </div>
             {/* Confirm Password Input */}
             <div>
               <label htmlFor="confirmPassword" className="sr-only">
-                Confirm Password 
+                Confirm Password
               </label>
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
+                type="password"
                 autoComplete="new-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm mt-2"
@@ -186,7 +187,7 @@ const RegistrationPage = () => {
                 onChange={handleChange}
               />
               <span
-                className="flex justify-end cursor-pointer"
+                className="inset-y-0 right-0 items-center cursor-pointer"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? "Hide" : "Show"}
