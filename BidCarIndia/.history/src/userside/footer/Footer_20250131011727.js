@@ -56,7 +56,7 @@ function Footer() {
               <li className="hover:text-gray-400 transition-all ease-in-out">
                 <Link to="/">Privacy Policy</Link>
               </li>
-              <li className="hover:text-gray-400 transition-all ease-in-out duration-100">
+              <li className="hover:text-gray-400 transition-all ease-in-out">
                 <Link to="/">Fees & Payments</Link>
               </li>
               <li className="hover:text-gray-400 transition-all ease-in-out">
@@ -73,17 +73,17 @@ function Footer() {
             <h3 className="text-lg font-semibold text-indigo-200 mb-4 hover:text-sky-500 transition duration-300">
               Contact Info
             </h3>
-            <div className="space-y-2 cursor-pointer">
+            <div className="space-y-2">
               <p className="flex items-center">
-                <i className=""></i>
+                <i className="fas fa-map-marker-alt text-indigo-300 hover:text-indigo-500"></i>
                 West Delhi
               </p>
               <p className="flex items-center">
-                <i className="text-indigo-300 hover:text-indigo-500"></i>
+                <i className="fas fa-envelope text-indigo-300 hover:text-indigo-500"></i>
                 auction@bidcarsindia.com
               </p>
               <p className="flex items-center">
-                <i className="text-indigo-300 hover:text-indigo-500"></i>
+                <i className="fas fa-phone text-indigo-300 hover:text-indigo-500"></i>
                 +91 8882451292
               </p>
             </div>

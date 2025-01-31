@@ -8,8 +8,8 @@ function Footer() {
       <div className="max-w-7xl ml-8 px-4 sm:px-6 lg:px-8 xs:flex-col mx-auto">
         <div className="flex flex-wrap justify-between">
           {/* Bid Cars India Section */}
-          <div className="w-full md:w-1/4 md:mb-0 pr-14 animate__animated animate__fadeIn">
-            <h3 className="text-2xl font-extrabold text-indigo-200 pb-3 transition-transform transform hover:scale-110 hover:text-sky-500 cursor-pointer">
+          <div className="w-full md:w-1/4 md:mb-0 pr-14 animate__animated animate__fadeIn cursor-pointer">
+            <h3 className="text-2xl font-extrabold text-indigo-200 pb-3 transition-transform transform hover:scale-110 hover:text-sky-500">
               Bid Cars India
             </h3>
             <p className="leading-relaxed text-left text-gray-300">
@@ -28,17 +28,17 @@ function Footer() {
             <h3 className="text-lg font-semibold text-indigo-200 mb-4 hover:text-sky-500 transition duration-300">
               Quick Links
             </h3>
-            <ul className="space-y-3">
-              <li className="hover:text-gray-400 transition-all ease-in-out">
+            <ul className="hover:text-gray-400 transition-all ease-in-out space-y-3">
+              <li>
                 <Link to="/">Home</Link>
               </li>
-              <li className="hover:text-gray-400 transition-all ease-in-out">
+              <li>
                 <Link to="/about">About Us</Link>
               </li>
-              <li className="hover:text-gray-400 transition-all ease-in-out">
+              <li>
                 <Link to="/service">Service</Link>
               </li>
-              <li className="hover:text-gray-400 transition-all ease-in-out">
+              <li>
                 <Link to="/contact">Contact</Link>
               </li>
             </ul>
@@ -56,7 +56,7 @@ function Footer() {
               <li className="hover:text-gray-400 transition-all ease-in-out">
                 <Link to="/">Privacy Policy</Link>
               </li>
-              <li className="hover:text-gray-400 transition-all ease-in-out duration-100">
+              <li className="hover:text-gray-400 transition-all ease-in-out">
                 <Link to="/">Fees & Payments</Link>
               </li>
               <li className="hover:text-gray-400 transition-all ease-in-out">
@@ -73,17 +73,17 @@ function Footer() {
             <h3 className="text-lg font-semibold text-indigo-200 mb-4 hover:text-sky-500 transition duration-300">
               Contact Info
             </h3>
-            <div className="space-y-2 cursor-pointer">
+            <div className="space-y-2">
               <p className="flex items-center">
-                <i className=""></i>
+                <i className="fas fa-map-marker-alt text-indigo-300 hover:text-indigo-500"></i>
                 West Delhi
               </p>
               <p className="flex items-center">
-                <i className="text-indigo-300 hover:text-indigo-500"></i>
+                <i className="fas fa-envelope text-indigo-300 hover:text-indigo-500"></i>
                 auction@bidcarsindia.com
               </p>
               <p className="flex items-center">
-                <i className="text-indigo-300 hover:text-indigo-500"></i>
+                <i className="fas fa-phone text-indigo-300 hover:text-indigo-500"></i>
                 +91 8882451292
               </p>
             </div>
